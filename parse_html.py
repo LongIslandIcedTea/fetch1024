@@ -9,7 +9,7 @@ class parse_html:
     def __init__(self):
         self.html=''
         self.title=''
-        self.author=''
+        self.author=[]
         self.content=''
         pass
 
@@ -31,18 +31,24 @@ class parse_html:
         soup = BeautifulSoup(html)
 
         #self.tile = soup.title.string.split("草榴社區")[0].strip()
-        self.tile = soup.title.string
+        self.title = soup.title.string
         print self.title
-        self.author = soup.find_all("th ")
+        author_list = soup.find_all("tr", class_='tr3 tr1')
+        for i in range(len(author_list)):
+            self.author.append(author_list[i].contents[1])
         print self.author
         content = soup.find_all("div",attrs={"class": "tpc_content"})
         print len(content)
         print content[0]
-        print type(content[1])
+        print content[1]
         print content[2]
+        print type(content[0])
 
         for i in range(len(content)):
-            content[i] = content[i].replace("<br><br>", 'apollo-br-br')
+            if content[i] == None:
+                print "None, "+i
+                continue
+            content[i] = str(content[i]).replace("<br><br>", 'apollo-br-br')
             content[i] = content[i].replace('<br>', '')
             content[i] = content[i].replace('&nbsp;', '  ')
             content[i] = content[i].replace("apollo-br-br", '\n')
@@ -50,15 +56,16 @@ class parse_html:
 
     def writeContent(self):
         file=open("d:/test.txt",'w')
-        file.writelines(self.title)
-        file.writelines(self.author)
-        file.writelines("\n\n\n")
-        file.writelines(self.content)
+        file.write(self.title.encode('utf8'))
+        file.write("\n".encode('utf8'))
+        file.write(str(self.author).encode('utf8'))
+        file.write("\n\n\n".encode('utf8'))
+        file.write(self.content)
         file.close()
 
 if __name__ == "__main__":
     url='http://cl.bearhk.info/read.php?tid=1513613&page=1'
-    file=open("d:/a.htm",'r')
+    file=open("d:/b.htm",'r')
     data=file.read()
     file.close()
     pu = parse_html()
