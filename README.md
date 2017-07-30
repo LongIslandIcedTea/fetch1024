@@ -1,4 +1,4 @@
 # fetch1024
-fetch colorful resources from 1024
+fetch resources from website
 
-Fetch images and novels from 1024. As for novels, to download them and submit them to kindle automatically.
+Fetch images and novels from website
